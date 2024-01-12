@@ -88,7 +88,7 @@ class Repository:
         os.chdir(self.directory)
 
         # check if there are any changes to commit
-        has_changes = os.system('git diff-index --quiet HEAD --') != 0
+        has_changes = os.system('git status --porcelain') != 0
 
         # change back to the original working directory
         os.chdir(cwd)

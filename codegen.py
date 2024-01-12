@@ -17,7 +17,7 @@ def main():
     if not os.path.isabs(cwd):
         cwd = os.path.abspath(cwd)
 
-    generator = aigenerator.AIGenerator("text-davinci-003")
+    generator = aigenerator.AIGenerator("gpt-4")
 
     repo = repository.Repository(cwd)
 
@@ -33,21 +33,20 @@ def main():
             repo.init_git_repo()
             continue
 
-
-
         project_files = project_files = repo.get_all_files()
 
         prompt = aiprompt.Prompt(project_files, user_input)
         print(prompt.create_prompt())
         response = generator.generate_code(prompt.create_prompt())
 
-        print(response.choices[0].text)
+        print(response)
         if (repo.has_changes_to_commit()):
+            print("Committing changes...")
             repo.commit_all_files(datetime.now())
 
         repo.update(response)
 
-        previousPrompt = conversation
+        previousPrompt = user_input
 
 if __name__ == '__main__':
     main()

@@ -1,16 +1,15 @@
 import os
-import openai
+from openai import OpenAI
 
 class AIGenerator:
     def __init__(self, model_engine):
         self.model_engine = model_engine
-        self.openai_api_key = os.environ["OPENAI_API_KEY"]
-        openai.api_key = self.openai_api_key
+        self.client = OpenAI()
 
-    def generate_code(self, conversation):
-        response = openai.Completion.create(
-            engine=self.model_engine,
-            prompt=conversation,
+    def generate_code(self, messages):
+        completion = self.client.chat.completions.create(
+            model=self.model_engine,
+            messages=messages,
             max_tokens=3000,
         )
-        return response.choices[0].text
+        return completion.choices[0].message.content
