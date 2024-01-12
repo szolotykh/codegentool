@@ -11,5 +11,21 @@ class AIGenerator:
             model=self.model_engine,
             messages=messages,
             max_tokens=3000,
+            tools=[
+                {
+                    "type":"function",
+                    "function":{
+                        "description":"Delete file from repository",
+                        "name":"delete_file",
+                        "parameters":{
+                            "type": "object",
+                            "properties": {
+                                "fileName": {"type": "string", "description": "Name of the file that should be deleted"},
+                            },
+                            "required": ["fileName"]
+                        }
+                    }
+                }
+            ]
         )
-        return completion.choices[0].message.content
+        return completion.choices[0].message

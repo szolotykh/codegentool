@@ -3,7 +3,13 @@ import argparse
 import repository
 import aiprompt
 import aigenerator
+import json
 from datetime import datetime
+
+def delete_file(fileName):
+    print("Deleting file: " + fileName)
+    # os.remove(fileName)
+    return "File deleted"
 
 def main():
     # Create an argument parser to parse the command line arguments
@@ -25,10 +31,10 @@ def main():
 
     while True:
         user_input = input("You: ")
-        if user_input.lower() == "exit":
+        if user_input.lower() == "#exit":
             break
 
-        if user_input.lower() == "clear":
+        if user_input.lower() == "#clear":
             repo.clear()
             repo.init_git_repo()
             continue
@@ -37,16 +43,30 @@ def main():
 
         prompt = aiprompt.Prompt(project_files, user_input)
         print(prompt.create_prompt())
-        response = generator.generate_code(prompt.create_prompt())
+        message = generator.generate_code(prompt.create_prompt())
 
-        print(response)
-        if (repo.has_changes_to_commit()):
-            print("Committing changes...")
-            repo.commit_all_files(datetime.now())
+        
+        tool_calls = message.tool_calls
+        if tool_calls:
+            print(tool_calls)
+            print("TOOL CALLS:")
+            available_functions = {
+                "delete_file": delete_file,
+            }
+            for tool_call in tool_calls:
+                function_name = tool_call.function.name
+                function_to_call = available_functions[function_name]
+                function_args = json.loads(tool_call.function.arguments)
+                function_response = function_to_call(**function_args)
+                print(function_response)
+        else:
+            print(message.content)
+            if (repo.has_changes_to_commit()):
+                print("Committing changes...")
+                repo.commit_all_files(datetime.now())
 
-        repo.update(response)
-
-        previousPrompt = user_input
+            repo.update(message.content)
+            previousPrompt = user_input
 
 if __name__ == '__main__':
     main()
