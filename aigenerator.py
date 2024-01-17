@@ -10,22 +10,6 @@ class AIGenerator:
         completion = self.client.chat.completions.create(
             model=self.model_engine,
             messages=messages,
-            max_tokens=3000,
-            tools=[
-                {
-                    "type":"function",
-                    "function":{
-                        "description":"Delete file from repository",
-                        "name":"delete_file",
-                        "parameters":{
-                            "type": "object",
-                            "properties": {
-                                "fileName": {"type": "string", "description": "Name of the file that should be deleted"},
-                            },
-                            "required": ["fileName"]
-                        }
-                    }
-                }
-            ]
+            max_tokens=3000
         )
         return completion.choices[0].message

@@ -46,27 +46,11 @@ def main():
         message = generator.generate_code(prompt.create_prompt())
 
         
-        tool_calls = message.tool_calls
-        if tool_calls:
-            print(tool_calls)
-            print("TOOL CALLS:")
-            available_functions = {
-                "delete_file": delete_file,
-            }
-            for tool_call in tool_calls:
-                function_name = tool_call.function.name
-                function_to_call = available_functions[function_name]
-                function_args = json.loads(tool_call.function.arguments)
-                function_response = function_to_call(**function_args)
-                print(function_response)
-        else:
-            print(message.content)
-            if (repo.has_changes_to_commit()):
-                print("Committing changes...")
-                repo.commit_all_files(datetime.now())
-
-            repo.update(message.content)
-            previousPrompt = user_input
+        print(message.content)
+        if (repo.has_changes_to_commit()):
+            print("Committing changes...")
+            repo.commit_all_files(datetime.now())
+        repo.update(message.content)
 
 if __name__ == '__main__':
     main()
