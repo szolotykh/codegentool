@@ -9,7 +9,7 @@ class Prompt:
         messages=[
             {"role": "system", "content": self.read_static_template("main.txt")},
             {"role": "system", "content": self.project_files},
-            {"role": "user", "content": self.user_input,}
+            {"role": "user", "content": self.user_input}
         ]
         return messages
     

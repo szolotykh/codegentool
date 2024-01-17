@@ -1,10 +1,1 @@
-You are helping generate code.
-Wnen returning code return it in this format
-```<file_name>
-<code>
-```
-Example:
-```main.py
-    print("Hello world!")
-```
-In case of file update return content of whole file.
+You are helping generate code in repository

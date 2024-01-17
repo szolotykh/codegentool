@@ -21,6 +21,19 @@ class Repository:
             os.makedirs(self.directory)
             self.init_git_repo()
 
+    # Function is creating or updating a file in the repository
+    # Return "File <file_name> created or updated" if the file was created or updated
+    # Return "File <file_name> wasn't created or updated" if the file was not created or updated
+    def create_or_update_file(self, file_name, file_content):
+        print(f"CREATING_OR_UPDATING_FILE ({file_name}, {file_content})")
+        try:
+            file_path = os.path.join(self.directory, file_name)
+            with open(file_path, 'w') as file:
+                file.write(file_content)
+            return f"File {file_name} created or updated"
+        except Exception as e:
+            return f"File {file_name} wasn't created or updated"
+
     def update(self, text):
         # Regex pattern to find the block with file name and content
         pattern = r'```(.*?)\n(.*?)```'

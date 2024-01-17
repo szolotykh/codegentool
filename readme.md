@@ -20,3 +20,8 @@ First question should have file name in it.
 Can you generate C# hello word program. Main file name is Program.cs \
 Can you add class Client with method Connect? \
 Can you add new class Database with method Connect in new file?
+
+Can you genetate base C# code for azure function with eventhub trigger?
+Azure function should forward message received from event hub to http server in json format.
+Can you add startup file with dependency injection for this project
+Can you add polly to retry http request up to 3 times?
